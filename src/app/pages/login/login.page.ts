@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton ,IonItem, IonLabel} from '@ionic/angular/standalone';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton ,IonItem, IonLabel, IonInput} from '@ionic/angular/standalone';
 import { Router ,RouterModule} from '@angular/router'; // Import Angular Router
 
 @Component({
@@ -10,7 +10,7 @@ import { Router ,RouterModule} from '@angular/router'; // Import Angular Router
   styleUrls: ['./login.page.scss'],
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, RouterModule
-            , IonButton, IonItem, IonLabel]
+            , IonButton, IonItem, IonLabel, IonInput]
 })
 export class LoginPage implements OnInit {
   
@@ -26,10 +26,14 @@ export class LoginPage implements OnInit {
   }
 
   // Login method to be implemented when Firebase is added later
-  async login() {
-    // Placeholder: Firebase will be added here later for login functionality
-    console.log('Email:', this.email, 'Password:', this.password);
-    // For now, assume login is successful and navigate to the home page
-    this.router.navigate(['/home']);
+  login() {
+    if (this.email && this.password) {
+      // Placeholder: Firebase will be added here later for login functionality
+      console.log('Email:', this.email, 'Password:', this.password);
+      // For now, assume login is successful and navigate to the home page
+      this.router.navigate(['/home']);
+    } else {
+      this.errorMessage = 'Please enter both email and password.';
+    }
   }
 }
