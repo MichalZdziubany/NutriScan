@@ -21,5 +21,8 @@
     <div *ngIf="errorMessage" class="error-message">
       <p>{{ errorMessage }}</p>
     </div>
+    <ion-button expand="full" routerLink="/register">Register</ion-button>
+
+    <ion-button expand="full" color="danger" (click)="googleSignIn()">Sign in with Google</ion-button>
   </div>
 </ion-content>

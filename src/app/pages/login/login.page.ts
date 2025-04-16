@@ -1,39 +1,98 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton ,IonItem, IonLabel, IonInput} from '@ionic/angular/standalone';
-import { Router ,RouterModule} from '@angular/router'; // Import Angular Router
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonButton,
+  IonItem,
+  IonLabel,
+  IonInput,
+} from '@ionic/angular/standalone';
+import { Router, RouterModule } from '@angular/router'; // Import Angular Router
+import { FirebaseService } from 'src/app/firebase.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, RouterModule
-            , IonButton, IonItem, IonLabel, IonInput]
+  imports: [
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    IonButton,
+    IonItem,
+    IonLabel,
+    IonInput,
+  ],
 })
 export class LoginPage implements OnInit {
-  
   email: string = '';
   password: string = '';
   errorMessage: string = '';
 
-  constructor(private router: Router) {}
-  
+  constructor(
+    private firebaseService: FirebaseService,
+    private router: Router
+  ) {}
+
   ngOnInit() {
-    //if user is logged in then redirect to home page
-    // Placeholder: Check if user is logged in (Firebase will be added later)
+    // Check if the user is already signed in on page load
+    this.checkUserSignedIn();
   }
 
-  // Login method to be implemented when Firebase is added later
-  login() {
-    if (this.email && this.password) {
-      // Placeholder: Firebase will be added here later for login functionality
-      console.log('Email:', this.email, 'Password:', this.password);
-      // For now, assume login is successful and navigate to the home page
+  // Check if the user is signed in, and redirect if true
+  checkUserSignedIn() {
+    const user = this.firebaseService.getAuth().currentUser; // Get the current user
+    if (user) {
+      // If the user is already signed in, redirect to home page
       this.router.navigate(['/home']);
-    } else {
-      this.errorMessage = 'Please enter both email and password.';
+    }
+  }
+
+  // Login with email and password
+  async login() {
+    try {
+      if (this.email && this.password) {
+        await this.firebaseService.loginWithEmailAndPassword(
+          this.email,
+          this.password
+        );
+        this.email = '';
+        this.password = '';
+        this.router.navigate(['/home']); // Redirect to home page after successful login
+      } else {
+        this.errorMessage = 'Please enter both email and password.';
+      }
+    } catch (error: unknown) {
+      // Check if the error is an instance of the Error object
+      if (error instanceof Error) {
+        this.errorMessage = error.message; // Safely access the error message
+      } else {
+        this.errorMessage = 'An unknown error occurred.';
+      }
+    }
+  }
+
+  // Google sign-in
+  async googleSignIn() {
+    try {
+      await this.firebaseService.googleSignIn();
+      this.router.navigate(['/home']); // Navigate to home after Google sign-in
+    } catch (error: unknown) {
+      // Check if the error is an instance of the Error object
+      if (error instanceof Error) {
+        this.errorMessage = error.message; // Safely access the error message
+      } else {
+        this.errorMessage = 'An unknown error occurred.';
+      }
     }
   }
 }

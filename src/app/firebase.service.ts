@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup,  deleteUser, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 import { firebaseConfig } from '../firebase-config';  // Import Firebase configuration
 
@@ -29,14 +29,49 @@ export class FirebaseService {
   }
 
   // Sign out user
-  signOutUser() {
-    return signOut(this.auth);
+  async signOutUser() {
+    try {
+      await signOut(this.auth);
+      return true; // Return true for successful sign out
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error('Error signing out: ' + error.message);
+      } else {
+        throw new Error('Error signing out: Unknown error');
+      }
+    }
   }
 
+  async deleteUserAccount(password: string) {
+    const user = this.auth.currentUser;
+
+    if (user) {
+      try {
+        const credential = EmailAuthProvider.credential(user.email!, password);
+        await reauthenticateWithCredential(user, credential); // Re-authenticate the user
+
+        await deleteUser(user); // Delete the account
+        return true; // Return true for successful account deletion
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          throw new Error('Error deleting account: ' + error.message);
+        } else {
+          throw new Error('Error deleting account: Unknown error');
+        }
+      }
+    } else {
+      throw new Error('No user is logged in');
+    }
+  }
+  
   // Google sign-in
   googleSignIn() {
     const provider = new GoogleAuthProvider();
     return signInWithPopup(this.auth, provider);
+  }
+
+  getAuth() {
+    return getAuth(this.app);
   }
 
   // Firestore save user data
