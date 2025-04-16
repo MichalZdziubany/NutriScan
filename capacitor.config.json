@@ -1,0 +1,6 @@
+{
+  "appId": "com.NutriScan.app",
+  "appName": "NutriScan",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
