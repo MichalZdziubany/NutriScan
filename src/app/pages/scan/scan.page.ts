@@ -9,7 +9,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData } from 'chart.js';
 
 // 🟡 Firebase Firestore Imports
-import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, query, getDocs, where } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 
 @Component({
@@ -72,6 +72,7 @@ export class ScanPage implements OnInit {
     if (result.hasContent) {
       this.scannedResult = result.content;
       this.fetchNutritionalInfo(this.scannedResult);
+
     }
 
     this.stopScan();
@@ -134,15 +135,22 @@ export class ScanPage implements OnInit {
 
           localStorage.setItem('lastScan', JSON.stringify(this.nutritionalInfo));
 
-          // ✅ Save to Firestore
           const scansRef = collection(this.firestore, 'scans');
-          await addDoc(scansRef, {
-            barcode,
-            timestamp: new Date(),
-            ...this.nutritionalInfo
-          });
+          const q = query(scansRef, where('barcode', '==', barcode));
+          const querySnapshot = await getDocs(q);
 
-          this.router.navigate(['/alternatives']);
+          if (querySnapshot.empty) {
+            // If barcode does not exist, save the product data to Firestore
+            await addDoc(scansRef, {
+              barcode,
+              timestamp: new Date(),
+              ...this.nutritionalInfo
+            });
+            console.log('Product saved to Firestore');
+          } else {
+            console.log('Barcode already exists in Firestore.');
+          }
+          
         } else {
           alert('Product not found!');
         }
