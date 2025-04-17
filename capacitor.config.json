@@ -2,5 +2,12 @@
   "appId": "com.NutriScan.app",
   "appName": "NutriScan",
   "webDir": "www",
-  "bundledWebRuntime": false
+  "bundledWebRuntime": false,
+  "plugins": {
+    "GoogleAuth": {
+      "scopes": ["profile", "email"],
+      "serverClientId": "1021976733210-h409lf90ob8kph228lr8ecueuv7jebdv.apps.googleusercontent.com",
+      "forceCodeForRefreshToken": true
+    }
+  }
 }

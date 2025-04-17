@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup,  deleteUser, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithCredential,  deleteUser, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 import { firebaseConfig } from '../firebase-config';  // Import Firebase configuration
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 
 @Injectable({
   providedIn: 'root',
@@ -65,9 +66,25 @@ export class FirebaseService {
   }
   
   // Google sign-in
-  googleSignIn() {
-    const provider = new GoogleAuthProvider();
-    return signInWithPopup(this.auth, provider);
+  async googleSignIn() {
+    try {
+      // Ensure the GoogleSignInClient is initialized
+      const googleUser = await GoogleAuth.signIn();
+
+      if (!googleUser) {
+        throw new Error('Google sign-in failed: No user returned.');
+      }
+
+      // Use the Google token to authenticate with Firebase
+      const credential = GoogleAuthProvider.credential(googleUser.authentication.idToken);
+      const auth = getAuth();
+      const userCredential = await signInWithCredential(auth, credential);
+
+      console.log('User signed in:', userCredential);
+    } catch (error) {
+      console.error('Google Sign-In Error:', error);
+      throw error;
+    }
   }
 
   getAuth() {

@@ -84,15 +84,12 @@ export class LoginPage implements OnInit {
   // Google sign-in
   async googleSignIn() {
     try {
-      await this.firebaseService.googleSignIn();
-      this.router.navigate(['/home']); // Navigate to home after Google sign-in
-    } catch (error: unknown) {
-      // Check if the error is an instance of the Error object
-      if (error instanceof Error) {
-        this.errorMessage = error.message; // Safely access the error message
-      } else {
-        this.errorMessage = 'An unknown error occurred.';
-      }
+      const userCredential = await this.firebaseService.googleSignIn();
+      console.log('User Signed In:', userCredential);  // Check this in the console
+      this.router.navigate(['/home']);
+    } catch (error) {
+      console.error('Google Sign-In Error:', error);
+      this.errorMessage = 'An error occurred during sign-in. Please try again.';
     }
   }
 }
