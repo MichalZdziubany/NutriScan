@@ -5,6 +5,7 @@ import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 import { firebaseConfig } from '../firebase-config';  // Import Firebase configuration
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 
+
 @Injectable({
   providedIn: 'root',
 })

@@ -8,7 +8,9 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData } from 'chart.js';
 
-
+// 🟡 Firebase Firestore Imports
+import { Firestore, collection, addDoc } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-scan',
@@ -21,23 +23,23 @@ export class ScanPage implements OnInit {
   scannedResult: string | null = null;
   nutritionalInfo: any = null;
   isScanning = false;
-  healthScoreColor: string = 'gray'; // Default color for health score
+  healthScoreColor: string = 'gray';
+
   chartData: ChartData = {
     labels: ['Sugar', 'Protein', 'Fiber', 'Saturated Fat', 'Salt'],
     datasets: [
       {
         data: [],
-        backgroundColor: ['#ff6347', '#32cd32', '#4682b4', '#ff4500', '#ffd700'], // Colors for each nutrient
+        backgroundColor: ['#ff6347', '#32cd32', '#4682b4', '#ff4500', '#ffd700'],
         hoverBackgroundColor: ['#ff4500', '#228b22', '#4169e1', '#ff6347', '#ffff00'],
       }
     ]
   };
+
   chartOptions: ChartConfiguration['options'] = {
     responsive: true,
     plugins: {
-      legend: {
-        position: 'top',
-      },
+      legend: { position: 'top' },
       tooltip: {
         callbacks: {
           label: function (tooltipItem) {
@@ -48,10 +50,10 @@ export class ScanPage implements OnInit {
     }
   };
 
-  constructor(private platform: Platform, private http: HttpClient) { }
+  // 🔥 Inject Firestore
+  constructor(private platform: Platform, private http: HttpClient, private firestore: Firestore,private router: Router) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   async startScan() {
     const permission = await BarcodeScanner.checkPermission({ force: true });
@@ -62,8 +64,8 @@ export class ScanPage implements OnInit {
     }
 
     this.isScanning = true;
-    BarcodeScanner.hideBackground(); // Make background transparent for camera preview
-    document.body.classList.add('scanner-active'); // Optional styling
+    BarcodeScanner.hideBackground();
+    document.body.classList.add('scanner-active');
 
     const result = await BarcodeScanner.startScan();
 
@@ -82,16 +84,15 @@ export class ScanPage implements OnInit {
     document.body.classList.remove('scanner-active');
   }
 
-  fetchNutritionalInfo(barcode: string) {
+  async fetchNutritionalInfo(barcode: string) {
     const url = `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`;
 
     this.http.get(url).subscribe(
-      (response: any) => {
+      async (response: any) => {
         if (response.product) {
           const product = response.product;
           const nutriments = product.nutriments || {};
 
-          // Extract individual values (defaults if undefined)
           const energy = nutriments['energy-kcal_100g'] || 0;
           const sugar = nutriments['sugars_100g'] || 0;
           const saturatedFat = nutriments['saturated-fat_100g'] || 0;
@@ -99,7 +100,6 @@ export class ScanPage implements OnInit {
           const fiber = nutriments['fiber_100g'] || 0;
           const protein = nutriments['proteins_100g'] || 0;
 
-          // 🧠 Calculate health score
           let score = 100;
           score -= sugar * 3;
           score -= saturatedFat * 2.5;
@@ -107,18 +107,16 @@ export class ScanPage implements OnInit {
           score += fiber * 2;
           score += protein * 1.5;
           score -= energy / 100;
-          score = Math.max(0, Math.min(100, score)); // Clamp between 0–100
+          score = Math.max(0, Math.min(100, score));
 
-          // Assign color based on health score
           if (score >= 75) {
-            this.healthScoreColor = 'green';  // Healthy
+            this.healthScoreColor = 'green';
           } else if (score >= 50) {
-            this.healthScoreColor = 'yellow'; // Average
+            this.healthScoreColor = 'yellow';
           } else {
-            this.healthScoreColor = 'red';    // Unhealthy
+            this.healthScoreColor = 'red';
           }
 
-          // Store data including health score
           this.nutritionalInfo = {
             foodName: product.product_name || 'Unknown Product',
             brand: product.brands || 'Unknown Brand',
@@ -132,8 +130,19 @@ export class ScanPage implements OnInit {
             salt
           };
 
-          // Prepare chart data
           this.chartData.datasets[0].data = [sugar, protein, fiber, saturatedFat, salt];
+
+          localStorage.setItem('lastScan', JSON.stringify(this.nutritionalInfo));
+
+          // ✅ Save to Firestore
+          const scansRef = collection(this.firestore, 'scans');
+          await addDoc(scansRef, {
+            barcode,
+            timestamp: new Date(),
+            ...this.nutritionalInfo
+          });
+
+          this.router.navigate(['/alternatives']);
         } else {
           alert('Product not found!');
         }

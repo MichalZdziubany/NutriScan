@@ -1,13 +1,35 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>history</ion-title>
+    <ion-title>Scan History</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">history</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <ng-container *ngIf="history$ | async as history; else loading">
+    <ion-card *ngFor="let item of history">
+      <img *ngIf="item.image" [src]="item.image" alt="Product Image" />
+      <ion-card-header>
+        <ion-card-title>{{ item.foodName }}</ion-card-title>
+        <p>{{ item.brand }}</p>
+      </ion-card-header>
+      <ion-card-content>
+        <p>
+          <strong>Health Score:</strong>
+          <span [style.color]="getHealthColor(item.healthScore)">
+            {{ item.healthScore }}
+          </span>
+        </p>
+        <p><strong>Sugar:</strong> {{ item.sugar }}g</p>
+        <p><strong>Protein:</strong> {{ item.protein }}g</p>
+        <p><strong>Fiber:</strong> {{ item.fiber }}g</p>
+        <p><strong>Saturated Fat:</strong> {{ item.saturatedFat }}g</p>
+        <p><strong>Salt:</strong> {{ item.salt }}g</p>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+  <ng-template #loading>
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Loading history...</p>
+  </ng-template>
 </ion-content>

@@ -4,10 +4,28 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">results</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-card *ngIf="lastScan">
+    <ion-card-header>
+      <ion-card-title>{{ lastScan.foodName }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p>Brand: {{ lastScan.brand }}</p>
+      <img *ngIf="lastScan.image" [src]="lastScan.image" alt="Product Image" />
+      <p [ngStyle]="{ color: lastScan.healthScore > 75 ? 'green' : lastScan.healthScore > 50 ? 'orange' : 'red' }">
+        Health Score: {{ lastScan.healthScore }}
+      </p>
+      <ul>
+        <li>Sugar: {{ lastScan.sugar }}g</li>
+        <li>Protein: {{ lastScan.protein }}g</li>
+        <li>Fiber: {{ lastScan.fiber }}g</li>
+        <li>Sat Fat: {{ lastScan.saturatedFat }}g</li>
+        <li>Salt: {{ lastScan.salt }}g</li>
+      </ul>
+    </ion-card-content>
+  </ion-card>
+
+  <div *ngIf="!lastScan">
+    <p>No scans yet.</p>
+  </div>
 </ion-content>
