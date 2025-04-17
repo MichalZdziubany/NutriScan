@@ -1,10 +1,14 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Scan Barcode</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-toolbar></app-toolbar>
 
 <ion-content>
+
+  <div class="scan-description">
+    <ion-text>
+      <h2>Scan a Product</h2>
+      <p>Use the scanner to scan a barcode on a food product to retrieve nutritional information and health scores. Once scanned, the app will display key nutritional details like sugar, protein, fiber, and more.</p>
+    </ion-text>
+  </div>
+  
   <div *ngIf="!isScanning; else scanning">
     <ion-button expand="block" (click)="startScan()">Start Scan</ion-button>
 

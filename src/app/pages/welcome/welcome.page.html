@@ -1,16 +1,22 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>welcome</ion-title>
+  <ion-toolbar class="ion-justify-content-center">
+    <ion-title class="ion-text-center">Welcome</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">welcome</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="welcome-container ion-padding">
 
-  <ion-button routerLink="/login">Login</ion-button>
-  <ion-button routerLink="/register">Register</ion-button>
+    <h1 class="ion-text-center">NutriScan</h1>
+    <p class="tagline ion-text-center">
+      Scan, track, and understand your food better. Make healthier choices, every day.
+    </p>
+
+    <ion-button expand="block" color="primary" routerLink="/login" class="ion-margin-top">
+      Login
+    </ion-button>
+    <ion-button expand="block" fill="outline" routerLink="/register" class="ion-margin-top">
+      Register
+    </ion-button>
+  </div>
 </ion-content>

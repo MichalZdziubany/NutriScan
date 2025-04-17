@@ -1,15 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar , IonButton, IonCard,IonCardHeader,IonCardContent,IonCardTitle} from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonButton,
+  IonCard,
+  IonCardHeader,
+  IonCardContent,
+  IonCardTitle,
+  IonText
+} from '@ionic/angular/standalone';
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
 import { Platform } from '@ionic/angular';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData } from 'chart.js';
+import { ToolbarComponent } from 'src/app/toolbar/toolbar.component';
 
 // 🟡 Firebase Firestore Imports
-import { Firestore, collection, addDoc, query, getDocs, where } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  addDoc,
+  query,
+  getDocs,
+  where,
+} from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 
 @Component({
@@ -17,7 +36,23 @@ import { Router } from '@angular/router';
   templateUrl: './scan.page.html',
   styleUrls: ['./scan.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButton, IonCard,IonCardHeader,IonCardContent, IonCardTitle,HttpClientModule,BaseChartDirective]
+  imports: [
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    CommonModule,
+    FormsModule,
+    IonButton,
+    IonCard,
+    IonCardHeader,
+    IonCardContent,
+    IonCardTitle,
+    HttpClientModule,
+    BaseChartDirective,
+    ToolbarComponent,
+    IonText,
+  ],
 })
 export class ScanPage implements OnInit {
   scannedResult: string | null = null;
@@ -30,10 +65,22 @@ export class ScanPage implements OnInit {
     datasets: [
       {
         data: [],
-        backgroundColor: ['#ff6347', '#32cd32', '#4682b4', '#ff4500', '#ffd700'],
-        hoverBackgroundColor: ['#ff4500', '#228b22', '#4169e1', '#ff6347', '#ffff00'],
-      }
-    ]
+        backgroundColor: [
+          '#ff6347',
+          '#32cd32',
+          '#4682b4',
+          '#ff4500',
+          '#ffd700',
+        ],
+        hoverBackgroundColor: [
+          '#ff4500',
+          '#228b22',
+          '#4169e1',
+          '#ff6347',
+          '#ffff00',
+        ],
+      },
+    ],
   };
 
   chartOptions: ChartConfiguration['options'] = {
@@ -44,14 +91,19 @@ export class ScanPage implements OnInit {
         callbacks: {
           label: function (tooltipItem) {
             return `${tooltipItem.label}: ${tooltipItem.raw}g`;
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   };
 
   // 🔥 Inject Firestore
-  constructor(private platform: Platform, private http: HttpClient, private firestore: Firestore,private router: Router) { }
+  constructor(
+    private platform: Platform,
+    private http: HttpClient,
+    private firestore: Firestore,
+    private router: Router
+  ) {}
 
   ngOnInit() {}
 
@@ -72,7 +124,6 @@ export class ScanPage implements OnInit {
     if (result.hasContent) {
       this.scannedResult = result.content;
       this.fetchNutritionalInfo(this.scannedResult);
-
     }
 
     this.stopScan();
@@ -128,12 +179,21 @@ export class ScanPage implements OnInit {
             protein,
             fiber,
             saturatedFat,
-            salt
+            salt,
           };
 
-          this.chartData.datasets[0].data = [sugar, protein, fiber, saturatedFat, salt];
+          this.chartData.datasets[0].data = [
+            sugar,
+            protein,
+            fiber,
+            saturatedFat,
+            salt,
+          ];
 
-          localStorage.setItem('lastScan', JSON.stringify(this.nutritionalInfo));
+          localStorage.setItem(
+            'lastScan',
+            JSON.stringify(this.nutritionalInfo)
+          );
 
           const scansRef = collection(this.firestore, 'scans');
           const q = query(scansRef, where('barcode', '==', barcode));
@@ -144,13 +204,12 @@ export class ScanPage implements OnInit {
             await addDoc(scansRef, {
               barcode,
               timestamp: new Date(),
-              ...this.nutritionalInfo
+              ...this.nutritionalInfo,
             });
             console.log('Product saved to Firestore');
           } else {
             console.log('Barcode already exists in Firestore.');
           }
-          
         } else {
           alert('Product not found!');
         }

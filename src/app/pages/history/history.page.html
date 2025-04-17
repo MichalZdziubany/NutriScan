@@ -1,10 +1,14 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Scan History</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-toolbar></app-toolbar>
 
 <ion-content class="ion-padding">
+
+  <div class="history-description">
+    <ion-text>
+      <h2>Scan History</h2>
+      <p>Here you can find a list of all the food items you've scanned.</p>
+    </ion-text>
+  </div>
+
   <ng-container *ngIf="history$ | async as history; else loading">
     <ion-card *ngFor="let item of history">
       <img *ngIf="item.image" [src]="item.image" alt="Product Image" />

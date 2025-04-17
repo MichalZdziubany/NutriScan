@@ -1,14 +1,19 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>home</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-toolbar></app-toolbar>
 
 <ion-content [fullscreen]="true">
-  <!-- Grid of Cards -->
-  <ion-grid>
-    <ion-row>
-      <ion-col size="6">
+
+  <div class="home-description">
+    <ion-text>
+      <h2>Welcome to NutriScan</h2>
+      <p>NutriScan helps you make healthier food choices by providing nutritional information and offering healthier alternatives for the products you scan.</p>
+    </ion-text>
+  </div>
+
+  <ion-grid class="ion-text-center">
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      
+      <!-- Scan Card -->
+      <ion-col size="4">
         <ion-card (click)="navigateTo('scan')">
           <ion-card-header>
             <ion-card-title class="ion-text-center">Scan</ion-card-title>
@@ -16,17 +21,21 @@
         </ion-card>
       </ion-col>
 
-      <ion-col size="6">
+      <!-- History Card -->
+      <ion-col size="4">
         <ion-card (click)="navigateTo('history')">
           <ion-card-header>
             <ion-card-title class="ion-text-center">History</ion-card-title>
           </ion-card-header>
         </ion-card>
       </ion-col>
+
     </ion-row>
 
-    <ion-row>
-      <ion-col size="6">
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+      
+      <!-- Settings Card -->
+      <ion-col size="4">
         <ion-card (click)="navigateTo('settings')">
           <ion-card-header>
             <ion-card-title class="ion-text-center">Settings</ion-card-title>
@@ -34,13 +43,15 @@
         </ion-card>
       </ion-col>
 
-      <ion-col size="6">
+      <!-- Last Scan Card -->
+      <ion-col size="4">
         <ion-card (click)="navigateTo('results')">
           <ion-card-header>
             <ion-card-title class="ion-text-center">Last Scan</ion-card-title>
           </ion-card-header>
         </ion-card>
       </ion-col>
+
     </ion-row>
   </ion-grid>
 </ion-content>

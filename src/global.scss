@@ -35,3 +35,103 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
+
+body {
+    background-color: white;
+    color: black;
+  }
+  
+  ion-header {
+    --background: white;
+    color: black;
+  }
+  
+  ion-toolbar {
+    --background: white;
+    color: black;
+  }
+  
+  ion-content {
+    --background: white;
+    color: black;
+  }
+
+  ion-card-title {
+    color: #121212;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  ion-card {
+    --background: white; 
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+  }
+
+  ion-card img {
+    padding: 8px;
+    max-width: 100%;
+    border-radius: 8px; /* Optional: To give images rounded corners */
+  }
+
+  ion-item {
+    --background: white; 
+    color: black;
+    border:#007bff 1px solid;
+    border-radius: 8px;
+    margin: 10px;
+  }
+
+  ion-text{
+    color:#121212
+  }
+  
+  /* Dark Mode */
+  body.dark {
+    background-color: #121212;
+    color: #ffffff;
+  }
+  
+  /* IonHeader and IonToolbar for dark mode */
+  body.dark {
+    background-color: #121212;
+
+  }
+  
+  body.dark ion-header {
+    --background: #333;
+    color: white;
+  }
+
+  body.dark ion-text {
+    --background: #333;
+    color: white;
+  }
+  
+  body.dark ion-toolbar {
+    --background: #333;
+    color: white;
+  }
+  
+  body.dark ion-content {
+    --background: #121212;
+    color: white;
+  }
+  body.dark ion-item {
+    --background: #121212;
+    color: white;
+  }
+  body.dark ion-button {
+    --background: #121212;
+    color: white;
+  }
+  body.dark ion-card {
+    --background: #444343;
+    color: white;
+  }

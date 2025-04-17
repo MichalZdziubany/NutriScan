@@ -16,6 +16,8 @@ import {
 } from '@ionic/angular/standalone';
 import { FirebaseService } from 'src/app/firebase.service';
 import { Router, RouterModule } from '@angular/router';
+import { ToolbarComponent } from 'src/app/toolbar/toolbar.component';
+import { ThemeService } from 'src/app/theme.service';
 
 @Component({
   selector: 'app-settings',
@@ -37,19 +39,34 @@ import { Router, RouterModule } from '@angular/router';
     IonButtons,
     IonText,
     IonInput,
+    ToolbarComponent
   ],
 })
 export class SettingsPage implements OnInit {
   passwordForDeletion: string = ''; // Password for account deletion
   errorMessage: string = ''; // To show error messages
   isDeleteModalOpen: boolean = false; // Control modal visibility
+  currentTheme: string = 'light';
 
   constructor(
     private firebaseService: FirebaseService,
-    private router: Router
+    private router: Router,
+    private themeService: ThemeService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    // Get the current theme from local storage
+    this.currentTheme = this.themeService.getCurrentTheme();
+    
+    // Apply the theme at app startup
+    this.themeService.setTheme(this.currentTheme === 'dark');
+  }
+
+  toggleTheme() {
+    const isDark = this.currentTheme === 'dark';
+    this.currentTheme = isDark ? 'light' : 'dark';
+    this.themeService.setTheme(!isDark);
+  }
 
   async signOut() {
     try {

@@ -10,6 +10,12 @@ import {
   IonItem,
   IonLabel,
   IonInput,
+  IonCard,
+  IonCardContent,
+  IonCardTitle,
+  IonCardHeader,
+  IonText,
+
 } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router';
 import { FirebaseService } from 'src/app/firebase.service';
@@ -31,6 +37,11 @@ import { FirebaseService } from 'src/app/firebase.service';
     IonItem,
     IonLabel,
     IonInput,
+    IonCard,
+    IonCardContent,
+    IonCardTitle,
+    IonCardHeader,
+    IonText,
   ],
 })
 export class RegisterPage {

@@ -14,8 +14,10 @@ import {
   IonCardContent,
   IonCardTitle,
   IonCardSubtitle,
+  IonText
 } from '@ionic/angular/standalone';
 import { RouterModule, Router } from '@angular/router';
+import { ToolbarComponent } from 'src/app/toolbar/toolbar.component'; // Import ToolbarComponent
 
 @Component({
   selector: 'app-home',
@@ -38,6 +40,8 @@ import { RouterModule, Router } from '@angular/router';
     IonCardContent,
     IonCardTitle,
     IonCardSubtitle,
+    ToolbarComponent,
+    IonText
   ],
 })
 export class HomePage implements OnInit {
@@ -48,4 +52,6 @@ export class HomePage implements OnInit {
   navigateTo(path: string) {
     this.router.navigate([`/${path}`]);
   }
+
+  
 }

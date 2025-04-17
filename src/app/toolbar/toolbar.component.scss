@@ -1,0 +1,15 @@
+.centered-title {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  ion-button {
+    --background: transparent;
+    --color: #fff;  /* Set a visible color for the button text */
+    --border-radius: 8px;
+  }
+  
+  ion-button:hover {
+    --background: #f0f0f0;  /* Add hover effect if needed */
+  }

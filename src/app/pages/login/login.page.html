@@ -5,23 +5,33 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="ion-padding">
-    <form (ngSubmit)="login()">
-      <ion-item>
-        <ion-label position="floating">Email</ion-label>
-        <ion-input [(ngModel)]="email" name="email" required></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Password</ion-label>
-        <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
-      </ion-item>
-      <ion-button expand="full" type="submit">Login</ion-button>
-    </form>
+  <div class="auth-wrapper">
+    <ion-card class="auth-card">
+      <ion-card-header>
+        <ion-card-title class="ion-text-center">Welcome Back</ion-card-title>
+        <p class="ion-text-center subtitle">Sign in to continue</p>
+      </ion-card-header>
 
-    <div *ngIf="errorMessage" class="error-message">
-      <p>{{ errorMessage }}</p>
-    </div>
-    <ion-button expand="full" routerLink="/register">Register</ion-button>
-    
+      <ion-card-content>
+        <form (submit)="login()">
+          <ion-item>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input type="email" required [(ngModel)]="email" name="email"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input type="password" required [(ngModel)]="password" name="password"></ion-input>
+          </ion-item>
+
+          <ion-button expand="block" type="submit" class="ion-margin-top">Sign In</ion-button>
+        </form>
+
+        <div class="ion-text-center ion-margin-top">
+          <p>Don't have an account?</p>
+          <ion-button fill="clear" size="small" routerLink="/register">Create Account</ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
   </div>
 </ion-content>

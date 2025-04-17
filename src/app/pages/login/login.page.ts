@@ -10,6 +10,11 @@ import {
   IonItem,
   IonLabel,
   IonInput,
+  IonCard,
+  IonCardContent,
+  IonCardTitle,
+  IonCardHeader,
+  IonText,
 } from '@ionic/angular/standalone';
 import { Router, RouterModule } from '@angular/router'; // Import Angular Router
 import { FirebaseService } from 'src/app/firebase.service';
@@ -31,6 +36,11 @@ import { FirebaseService } from 'src/app/firebase.service';
     IonItem,
     IonLabel,
     IonInput,
+    IonCard,
+    IonCardContent,
+    IonCardTitle,
+    IonCardHeader,
+    IonText,
   ],
 })
 export class LoginPage implements OnInit {
