@@ -4,10 +4,34 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">scan</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Scan Barcode</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <div *ngIf="!isScanning; else scanning">
+    <ion-button expand="block" (click)="startScan()">
+      Start Scan
+    </ion-button>
+
+    <ion-card *ngIf="scannedResult">
+      <ion-card-header>
+        <ion-card-title>Scan Result</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        {{ scannedResult }}
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ng-template #scanning>
+    <div class="scanner-info">
+      <p>Scanning... Point the camera at a barcode</p>
+      <ion-button color="danger" expand="block" (click)="stopScan()">Cancel</ion-button>
+    </div>
+  </ng-template>
+
 </ion-content>

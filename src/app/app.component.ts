@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { Router } from '@angular/router'; // Import Angular Router
 import { RouterModule } from '@angular/router'; // Import RouterModule for routing
+
 
 @Component({
   selector: 'app-root',
@@ -10,4 +11,6 @@ import { RouterModule } from '@angular/router'; // Import RouterModule for routi
 })
 export class AppComponent {
   constructor() {}
+
+  
 }
