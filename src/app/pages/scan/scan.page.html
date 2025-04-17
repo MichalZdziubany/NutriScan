@@ -1,30 +1,42 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>scan</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar>
     <ion-title>Scan Barcode</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-
+<ion-content>
   <div *ngIf="!isScanning; else scanning">
-    <ion-button expand="block" (click)="startScan()">
-      Start Scan
-    </ion-button>
+    <ion-button expand="block" (click)="startScan()">Start Scan</ion-button>
 
     <ion-card *ngIf="scannedResult">
       <ion-card-header>
-        <ion-card-title>Scan Result</ion-card-title>
+        <ion-card-title>{{ nutritionalInfo.foodName }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        {{ scannedResult }}
+        <p>Brand: {{ nutritionalInfo.brand }}</p>
+        <img *ngIf="nutritionalInfo.image" [src]="nutritionalInfo.image" alt="Product Image" />
+
+        <div *ngIf="nutritionalInfo.healthScore">
+          <p [ngStyle]="{ color: healthScoreColor }">Health Score: {{ nutritionalInfo.healthScore }}</p>
+        </div>
+
+        <div *ngIf="nutritionalInfo.sugar">
+          <p><strong>Sugar:</strong> {{ nutritionalInfo.sugar }}g</p>
+          <p><strong>Protein:</strong> {{ nutritionalInfo.protein }}g</p>
+          <p><strong>Fiber:</strong> {{ nutritionalInfo.fiber }}g</p>
+          <p><strong>Saturated Fat:</strong> {{ nutritionalInfo.saturatedFat }}g</p>
+          <p><strong>Salt:</strong> {{ nutritionalInfo.salt }}g</p>
+        </div>
       </ion-card-content>
     </ion-card>
+
+    <div *ngIf="nutritionalInfo" style="display: block;">
+      <canvas baseChart
+        [data]="chartData"
+        [options]="chartOptions"
+        [type]="'bar'">
+      </canvas>
+    </div>
   </div>
 
   <ng-template #scanning>
@@ -33,5 +45,4 @@
       <ion-button color="danger" expand="block" (click)="stopScan()">Cancel</ion-button>
     </div>
   </ng-template>
-
 </ion-content>
