@@ -24,6 +24,10 @@
             <ion-input type="password" required [(ngModel)]="password" name="password"></ion-input>
           </ion-item>
 
+          <div *ngIf="errorMessage" class="ion-text-center" style="color: red; margin-bottom: 16px;">
+            {{ errorMessage }}
+          </div>
+
           <ion-button expand="block" type="submit" class="ion-margin-top">Sign In</ion-button>
         </form>
 
